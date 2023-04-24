@@ -1,5 +1,8 @@
 #include <stdio.h>
 
+const int SCREEN_WIDTH = 12;
+const int SCREEN_HEIGHT = 20;
+
 void display_message(const char *message, int yOffset){
     char buffer[100] = {0};
     strcpy(buffer, message);
