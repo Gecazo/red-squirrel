@@ -48,6 +48,11 @@ void display_score(){
     print_at_xy(0, 0, buffer);
 }
 
+void draw(){
+    display_score();
+    display_count_down();
+}
+
 void display_count_down(){
     if(immunity_count_down > 0){
         char buffer[3] = {0};
