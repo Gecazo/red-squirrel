@@ -11,6 +11,8 @@ int GOAL_POINTS;
 int lives;
 int score;
 
+int immunity_count_down;
+
 HANDLE _output_handle; // works only on windows
 
 void hidecursor()
@@ -33,6 +35,18 @@ void display_score(){
     char buffer[50] = {0};
     sprintf(buffer, "SCORE: %4d LIVES: %d", score, lives);
     print_at_xy(0, 0, buffer);
+}
+
+void display_count_down(){
+    if(immunity_count_down > 0){
+        char buffer[3] = {0};
+        char *countdown = itoa(immunity_count_down/10, buffer, 10);
+        strcpy(buffer, countdown);
+        SetConsoleTextAttribute (_output_handle, FOREGROUND_BLUE);
+        display_message("GET READY!", -2);
+        display_message(buffer, 0);
+        SetConsoleTextAttribute (_output_handle, FOREGROUND_INTENSITY);
+    }
 }
 
 char get_input(){
