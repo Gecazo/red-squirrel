@@ -21,3 +21,12 @@ char get_input(){
 
     return ch;
 }
+
+void clear_screen(){
+    char buffer[] = "            ";
+
+    for(int i=0;i<3;i++)
+    {
+        print_at_xy(0, i, buffer);
+    }
+}
