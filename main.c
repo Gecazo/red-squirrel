@@ -5,6 +5,8 @@
 const int SCREEN_WIDTH = 12;
 const int SCREEN_HEIGHT = 20;
 
+int lives;
+
 void display_message(const char *message, int yOffset){
     char buffer[100] = {0};
     strcpy(buffer, message);
@@ -23,10 +25,21 @@ char get_input(){
 }
 
 void clear_screen(){
-    char buffer[] = "            ";
+    char buffer[] = "            "; //12  spaces
 
     for(int i=0;i<3;i++)
     {
         print_at_xy(0, i, buffer);
     }
+}
+
+void decrement_lives(){
+    lives--;
+}
+
+int zero_lives(){
+    if(lives == 0){
+        return 1;
+    }
+    return 0;
 }
