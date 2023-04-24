@@ -3,6 +3,7 @@
 #include <conio.h>
 #include <windows.h> // to use HANDLE
 
+
 const int SCREEN_WIDTH = 12;
 const int SCREEN_HEIGHT = 20;
 
@@ -11,7 +12,16 @@ int GOAL_POINTS;
 int lives;
 int score;
 
+int wall_y_pos;
+int left_wall_spike;
+int right_wall_spike;
+
+char squirrel[2];
+int squirrel_x;
+int squirrel_y;
+
 int immunity_count_down;
+
 
 HANDLE _output_handle; // works only on windows
 
@@ -51,6 +61,50 @@ void display_score(){
 void draw(){
     display_score();
     display_count_down();
+}
+
+void draw_wall(){
+    char wall_row[SCREEN_WIDTH+1];
+    int wall_index = wall_y_pos * -1;
+    left_wall_spike = 0;
+    right_wall_spike = 0;
+    for(int i=2;i<20;i++,wall_index++){
+
+        for(int j=1;j<SCREEN_WIDTH;j++){
+            wall_row[j] = ' ';
+        }
+
+        wall_row[SCREEN_WIDTH+1] = '\0';
+
+        wall_row[0] = '|';
+        wall_row[SCREEN_WIDTH] = '|';
+        
+        if(left_wall[wall_index] == '>'){            
+            wall_row[1] = '>';
+            if(i==SCREEN_HEIGHT/2){
+                left_wall_spike = 1;
+            }
+        }
+
+
+        if(right_wall[wall_index] == '<'){            
+            wall_row[SCREEN_WIDTH-1] = '<';
+            if(i==SCREEN_HEIGHT/2){
+                right_wall_spike = 1;
+            }
+        }
+
+        print_at_xy(0, i, wall_row);
+    }
+}
+
+void draw_squirrel(){
+
+    if(squirrel_y >= SCREEN_HEIGHT) return;
+
+    SetConsoleTextAttribute (_output_handle, FOREGROUND_RED);
+    print_at_xy(squirrel_x, squirrel_y, squirrel); 
+    SetConsoleTextAttribute (_output_handle, FOREGROUND_INTENSITY);  
 }
 
 void display_count_down(){
