@@ -24,6 +24,17 @@ void hidecursor()
    SetConsoleCursorInfo(_output_handle, &info);
 }
 
+void print_at_xy(int x, int y, char *val)
+{
+  COORD coord;
+  coord.X = x;
+  coord.Y = y;
+  SetConsoleCursorPosition(_output_handle, coord);
+  printf("%s", (const char *)val);
+  fflush(stdout);
+}
+
+
 void display_message(const char *message, int yOffset){
     char buffer[100] = {0};
     strcpy(buffer, message);
