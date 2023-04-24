@@ -1,11 +1,23 @@
 #include <stdio.h>
 #include <string.h>
 #include <conio.h>
+#include <windows.h> // to use HANDLE
 
 const int SCREEN_WIDTH = 12;
 const int SCREEN_HEIGHT = 20;
 
 int lives;
+
+HANDLE _output_handle; // works only on windows
+
+void hidecursor()
+{
+   _output_handle = GetStdHandle(STD_OUTPUT_HANDLE);
+   CONSOLE_CURSOR_INFO info;
+   info.dwSize = 100;
+   info.bVisible = FALSE;
+   SetConsoleCursorInfo(_output_handle, &info);
+}
 
 void display_message(const char *message, int yOffset){
     char buffer[100] = {0};
