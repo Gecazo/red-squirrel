@@ -13,6 +13,7 @@ int lives;
 int score;
 
 int wall_y_pos;
+int WALL_SPEED;
 
 char left_wall[60];
 char right_wall[60];
@@ -26,6 +27,7 @@ int game_state;
 int GAME_STATE_OVER;
 
 int squirrel_delta;
+int squirrel_SPEED;
 char squirrel[2];
 int squirrel_x;
 int squirrel_y;
@@ -34,6 +36,10 @@ int immunity_count_down;
 
 
 HANDLE _output_handle; // works only on windows
+
+
+int main()
+void init()
 
 void hidecursor()
 {
@@ -155,6 +161,13 @@ void update_squirrel(char ch){
         squirrel_x = 1;
         squirrel_y = SCREEN_HEIGHT / 2;
     }  
+}
+
+void update_wall(){
+    wall_y_pos += WALL_SPEED;
+    if(wall_y_pos > 0){
+        wall_y_pos = -SCREEN_HEIGHT;
+    }
 }
 
 char get_input(){
