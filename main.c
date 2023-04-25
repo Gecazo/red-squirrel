@@ -13,9 +13,19 @@ int lives;
 int score;
 
 int wall_y_pos;
+
+char left_wall[60];
+char right_wall[60];
+char left_spike[3];
+char right_spike[3];
+
 int left_wall_spike;
 int right_wall_spike;
 
+int game_state;
+int GAME_STATE_OVER;
+
+int squirrel_delta;
 char squirrel[2];
 int squirrel_x;
 int squirrel_y;
@@ -44,7 +54,6 @@ void print_at_xy(int x, int y, char *val)
   fflush(stdout);
 }
 
-
 void display_message(const char *message, int yOffset){
     char buffer[100] = {0};
     strcpy(buffer, message);
@@ -56,11 +65,6 @@ void display_score(){
     char buffer[50] = {0};
     sprintf(buffer, "SCORE: %4d LIVES: %d", score, lives);
     print_at_xy(0, 0, buffer);
-}
-
-void draw(){
-    display_score();
-    display_count_down();
 }
 
 void draw_wall(){
@@ -119,6 +123,40 @@ void display_count_down(){
     }
 }
 
+void update_squirrel(char ch){
+    squirrel_x += squirrel_delta;
+    if(squirrel_x == 1 && ch == 'j' && game_state == GAME_STATE_PLAYING){
+        squirrel_delta = squirrel_SPEED;
+        squirrel_x += squirrel_delta;
+        increment_score();
+    }
+    else if(squirrel_x == SCREEN_WIDTH-1 && ch == 'j' && game_state == GAME_STATE_PLAYING){
+        squirrel_delta = -squirrel_SPEED;
+        squirrel_x += squirrel_delta;
+        increment_score();
+    }
+    else if(squirrel_x <= 1){
+        squirrel_delta = 0;
+        squirrel_x = 1;        
+    }
+    else if(squirrel_x >= SCREEN_WIDTH-1){
+        squirrel_delta = 0;
+        squirrel_x = SCREEN_WIDTH-1;
+    }  
+
+    if(immunity_count_down > 10 && lives < 3){
+        squirrel_x = SCREEN_WIDTH/2;
+        squirrel_y += 1;
+        if(squirrel_y >= SCREEN_HEIGHT){
+            squirrel_y = SCREEN_HEIGHT;
+        }
+    }
+    if(immunity_count_down < 10 && immunity_count_down > 1){
+        squirrel_x = 1;
+        squirrel_y = SCREEN_HEIGHT / 2;
+    }  
+}
+
 char get_input(){
     char ch = 0;
 
@@ -151,5 +189,25 @@ int zero_lives(){
     if(lives == 0){
         return 1;
     }
+    return 0;
+}
+
+void draw(){
+    display_score();
+    display_count_down();
+}
+
+int collides_with_spike(){
+    if(game_state == GAME_STATE_OVER){
+        return 0;
+    }
+
+    if(squirrel_x == 1 && left_wall_spike == 1){
+        return 1;
+    }
+    else if(squirrel_x == SCREEN_WIDTH-1 && right_wall_spike == 1){
+        return 1;
+    }
+
     return 0;
 }
