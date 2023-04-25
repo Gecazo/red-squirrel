@@ -11,6 +11,7 @@ int GOAL_POINTS;
 
 int lives;
 int score;
+char game_over_string[30];
 
 int wall_y_pos;
 int WALL_SPEED;
@@ -25,6 +26,7 @@ int right_wall_spike;
 
 int game_state;
 int GAME_STATE_OVER;
+int GAME_STATE_PLAYING;
 
 int squirrel_delta;
 int squirrel_SPEED;
@@ -38,8 +40,76 @@ int immunity_count_down;
 HANDLE _output_handle; // works only on windows
 
 
-int main()
-void init()
+int main(){
+
+    init();
+    printf("\ninit");
+    system("@cls||clear");
+
+    //game loop, 1000/30
+    while(1){
+
+        if(immunity_count_down > 0){
+            immunity_count_down--;
+        }
+
+        clear_screen();    
+
+        char ch = get_input();
+
+        //clear screen and quit
+        if(game_state == GAME_STATE_OVER && ch == 'q'){
+            system("@cls||clear");
+            break;
+        }
+
+        clear_screen();
+        update_wall();
+        update_squirrel(ch);
+        draw();
+        if(collides_with_spike() && immunity_count_down <= 0){
+            decrement_lives();
+            immunity_count_down = 30;
+        }
+        
+        if(zero_lives()){
+            set_game_state_over();
+            display_message(game_over_string, -2);
+            display_message("'q' to quit...", 0);
+        }
+        Sleep(100);
+
+    }
+
+    clean_up();
+}
+void init(){
+    score = 0;
+    lives = 3;
+    GOAL_POINTS = 10;
+    GAME_STATE_OVER = 1;
+    GAME_STATE_PLAYING = 2;
+    WALL_SPEED = 1;
+
+    squirrel_x = 1;
+    squirrel_y = SCREEN_HEIGHT/2;
+    squirrel_SPEED = 6;
+    squirrel_delta = 0;
+    left_wall_spike = 0;
+    right_wall_spike = 0;
+    immunity_count_down = 30;
+
+    game_state = GAME_STATE_PLAYING;
+    wall_y_pos = -20;
+    strcpy(left_spike, "|>");
+    strcpy(right_spike, "<|");
+    strcpy(game_over_string, "GAME OVER");
+    strcpy(squirrel, "X");
+
+    strcpy(left_wall,  "|||>|||||||||||||>>||||||>>||||||>>||||");
+    strcpy(right_wall, "|||||||||<||||<||||||||<||||||<<||||||<");
+    hidecursor();
+}
 
 void hidecursor()
 {
