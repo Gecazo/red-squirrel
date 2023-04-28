@@ -13,6 +13,7 @@ Collect points by jumping over the walls.
 If the squirrel collides with a spike, one life is lost.
 The game ends when all lives are lost.
 Press 'q' to quit the game at any time.
+
 ![](https://github.com/Gecazo/red-squirrel/blob/main/screenshot.png)
 
 # The game uses the following C libraries:
